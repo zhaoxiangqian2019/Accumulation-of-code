@@ -1,0 +1,72 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "businesscard", "VS2010_x64\businesscard.vcxproj", "{CA1DC4B4-550F-4A07-9A33-C59093FA9E20}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hello", "VS2010_x64\hello.vcxproj", "{BF3ABF6A-AAC2-4C06-B340-FB4E92E23D87}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "image", "VS2010_x64\image.vcxproj", "{F88B076C-2B66-464F-BF37-48915B054B41}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "invoice", "VS2010_x64\invoice.vcxproj", "{2E6012DC-3030-4201-8692-355FF4D823E2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_pdfimpose", "VS2010_x64\starter_pdfimpose.vcxproj", "{F52BE75B-BE5A-4F99-989D-2990F4621B88}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_basic", "VS2010_x64\starter_basic.vcxproj", "{B3E61354-A3CF-4F3D-A526-916B07C18C15}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_block", "VS2010_x64\starter_block.vcxproj", "{83A2411B-A5E4-4ADE-8D15-35E62EE805D9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_color", "VS2010_x64\starter_color.vcxproj", "{91BC9A1D-065B-4AB0-94DE-C94090EDA844}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_fallback", "VS2010_x64\starter_fallback.vcxproj", "{3C01A12C-1E16-4381-9804-78ED80AAADFB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_graphics", "VS2010_x64\starter_graphics.vcxproj", "{6A72FA64-F7EB-42E8-BF0E-252FCE20E50D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_image", "VS2010_x64\starter_image.vcxproj", "{F6EF9D6E-79AE-4D48-9A5D-F75AD7348ABA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_layer", "VS2010_x64\starter_layer.vcxproj", "{51C6F184-CBE5-4DFC-9AFD-0C4471E1E32D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_opentype", "VS2010_x64\starter_opentype.vcxproj", "{7FD9788B-AD9A-45F2-8493-0D1B4C0199B2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_pcos", "VS2010_x64\starter_pcos.vcxproj", "{7FE47EFA-63BA-4210-8660-E84622934AF0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_pdfa1b", "VS2010_x64\starter_pdfa1b.vcxproj", "{4670BA1F-2CB8-46BE-A833-2E40B6555BDF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_pdfa2b", "VS2010_x64\starter_pdfa2b.vcxproj", "{EF90BA1F-2D9A-46BE-8F73-2E3BA65575AF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_pdfmerge", "VS2010_x64\starter_pdfmerge.vcxproj", "{3A2B49AC-5956-4D01-AD66-88472B4CE30C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_pdfua1", "VS2010_x64\starter_pdfua1.vcxproj", "{34D00C1C-ADCB-40F4-8C31-A65CAD502FFE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_pdfx3", "VS2010_x64\starter_pdfx3.vcxproj", "{1CC62CC9-6E43-415E-A8FB-B3A3865CD5D4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_pdfx4", "VS2010_x64\starter_pdfx4.vcxproj", "{4B9564E4-62D7-4D1D-B4A1-FAC0341831C5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_portfolio", "VS2010_x64\starter_portfolio.vcxproj", "{338B641B-BA05-473D-92A1-81A61A7C465C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_pvf", "VS2010_x64\starter_pvf.vcxproj", "{25AA097C-E821-4882-8359-C82A9A403B33}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_shaping", "VS2010_x64\starter_shaping.vcxproj", "{74DB98E1-C2ED-438C-BBF3-81DA8492B3EC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_svg", "VS2010_x64\starter_svg.vcxproj", "{5A035F84-2929-4A8C-8B14-FE825B229FD5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_table", "VS2010_x64\starter_table.vcxproj", "{51F8BB85-D2F6-4DF0-9C8C-866AC36C7F81}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_textflow", "VS2010_x64\starter_textflow.vcxproj", "{E7C2FFBA-6911-4A71-A169-9E1E32768FB7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_textline", "VS2010_x64\starter_textline.vcxproj", "{CB3FB09E-B6B4-4EF9-807D-0E1762815E78}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starter_formfields", "VS2010_x64\starter_formfields.vcxproj", "{218C3821-4FF3-4F3F-8C9C-8A117CC3D90E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hellodl", "VS2010_x64\hellodl.vcxproj", "{849A9BBB-4DE5-4E1E-B265-C837614ABD0E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

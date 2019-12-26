@@ -1,0 +1,841 @@
+API changes
+===========
+
+This file documents those API changes which affect existing PDFlib client
+programs. Although we go to some efforts in maintaining the existing API
+functions, it is sometimes necessary to incorporate a few non-backward
+compatible changes in order to streamline the API and introduce new or
+extended functions.
+
+
+PPS, PPS API, Block Plugin and Acrobat versions
+===============================================
+           PPS   Block     Acrobat                 Acrobat
+PPS        API   Plugin    Windows                 macOS
+---------------------------------------------------------------------
+9.0.0     10     5.0       8,9,X,XI                8,9,X,XI
+9.0.1     10     5.1       8,9,X,XI                8,9,X,XI
+9.0.2     10     5.2       8,9,X,XI                8,9,X,XI
+9.0.3     10     5.3       8,9,X,XI                8,9,X,XI
+9.0.4     10     5.4       8,9,X,XI                8,9,X,XI
+9.0.5     10     5.5       8,9,X,XI,DC             8,9,X,XI,DC
+9.0.6     10     5.6       8,9,X,XI,DC             8,9,X,XI,DC
+9.0.7     10     5.7       8,9,X,XI,DC             8,9,X,XI,DC
+9.1.0     10     5.10      8,9,X,XI,DC             8,9,X,XI,DC
+9.1.1     10     5.11      8,9,X,XI,DC 2017        8,9,X,XI,DC 2017
+9.1.2     10     5.12      8,9,X,XI,DC 2018        8,9,X,XI,DC 2018
+9.2.0     10     5.20      8,9,X,XI,DC 2019            X,XI,DC 2019
+
+
+PDFlib version numbers and .NET Core version numbers
+====================================================
+
+.NET Core introduced a separate versioning scheme; it does not apply to the
+Classic .NET binding.
+
+PDFlib     .NET Core
+--------------------
+9.1.2px    1.2.x		(9.1.2p8 is the first version for .NET Core)
+9.2.0px    2.0.x
+
+
+Identifying deprecated API functions
+====================================
+API features are never removed between a particular version and its successor.
+Instead, features are first declared as deprecated. There are several methods
+for identifying deprecated API calls in user code. These are discussed in the
+document "PDFlib Migration Guide".
+
+
+PDFlib 9.2.0
+============
+
+PDF/UA-1
+--------
+The "lang" option of PDF_begin_document() is now required in PDF/UA-1 mode.
+This is necessary because the natural language for some items cannot be
+declared otherwise, including the required dc:title XMP property. This
+also fixes PAC validation problems with missing language identification
+of bookmarks, form fields and annotations.
+
+
+Bindings
+--------
+- Removed the VB and Delphi samples from the COM package.
+
+- Removed the REALbasic/Xojo binding.
+
+- Removed the Cobol binding from the zSeries packages.
+
+- C binding:
+  PDF_open_pdi_callback() did not work correctly with large files >2GB
+  on Windows and z/OS. Fixing this required a small change in the declaration
+  of PDF_open_pdi_callback() and the seekproc callback function.
+
+
+Deprecated Options
+------------------
+- PDF_load_image():
+  - options "createtemplate" and "iconname" are deprecated; use
+    "templateoptions"
+  - option "downsamplemask"
+
+- PDF_begin_template_ext(): option "postscript"
+  
+- PDF_begin_item() and option "tag" of various API functions: option "inline"
+  is deprecated, use "direct".
+
+
+
+PDFlib 9.1.2
+============
+The simple text output functions PDF_show_xy() etc. by default no longer
+emit ActualText for glyphs in a font which are used to represent multiple
+different Unicode values if "passthrough" text output mode is active.
+The previous behavior can be restored by setting any of the text filter
+options "charref=true" or "escapesequence=true" (or the unsupported
+text filter option "passthrough=false").
+
+
+.NET binding
+------------
+PDFlib.NET for .NET Framework 4.0 and above now requires the runtime libraries 
+from Visual Studio 2015; see PDFlib-in-.NET-HowTo.pdf for details.
+
+
+Tagged PDF
+----------
+PDF_begin_item() and "tag" suboption of various API functions:
+consolidated the PDF 1.7 tag nesting rules with the PDF 2.0 rules for
+consistency. This involved some incompatible changes (stricter rules)
+for rarely used parent/child combinations of tags.
+
+Incompatible nesting rule changes (stricter nesting rules):
+- RB, RT, and RP can only be children of Ruby
+- WT and WP can only be children of Warichu
+- Document may not contain Caption
+- Caption is no longer allowed to contain Document and Caption
+- H, H1 etc. are no longer allowed to contain Document, Part, and Div
+- TH and TD are no longer allowed to contain Document and Caption
+- Inline elements with inline=false are no longer allowed to contain L, Table
+  or Document
+
+Compatible nesting rule change (relaxed nesting rule):
+- Caption may contain Ruby and Warichu
+
+
+PDFlib 9.1.1
+============
+The option "transparencygroup" of PDF_open_pdi_page() and PDF_load_graphics()
+is now forced to "auto" in PDF/A-2/3 and PDF/X-4/5 modes to ensure standard-
+conforming output with a suitable blend color space and group isolation.
+
+Imported or automatically created transparency groups for imported pages are
+now always isolated. As a result the whole imported page is blended with the
+existing background. If you need the previous behavior where individual parts
+of the imported page blend against the background use the following option of
+PDF_open_pdi_page():
+
+"transparencygroup={isolated=false}"
+
+PDF_open_pdi_document(): if uselayers=false is supplied no other documents
+can be imported with layers. Vice versa, as soon as layers have been defined
+directly with PDF_define_layer() or indirectly with PDF_open_pdi_document()
+with uselayers=true the option uselayers=false is no longer allowed. This
+is required to comply with the PDF requirement that all layers must be listed
+in the OCProperties structure.
+
+
+PDFlib 9.1
+==========
+
+New API function
+----------------
+PDF_create_devicen()
+
+
+Deprecated items
+----------------
+Removed the following deprecated functions and options from the API Reference
+(they are still available in the code):
+
+PDF_set_parameter()
+PDF_set_value()
+PDF_get_parameter()
+PDF_get_value()
+PDF_xshow()
+PDF_begin_glyph()
+PDF_setdash()
+PDF_setdashpattern()
+PDF_setflat()
+PDF_setlinejoin()
+PDF_setlinecap()
+PDF_setmiterlimit()
+PDF_initgraphics()
+PDF_begin_pattern()
+
+
+PDF_load_font(): autocidfont
+
+PDF_load_image(): downsamplemask
+
+PDF_info_font(): checkcolorspace (hasn't been implemented anyway)
+
+PDF_makespotcolor(): removed the color libraries "PANTONE Goe coated" and
+"PANTONE Goe uncoated" as they are no longer supported by Pantone, Inc.
+
+Changes in PDF_create_field():
+Changed the font encoding handling for form fields to work around
+display problems in Acrobat: for type=checkbox and radiobutton in
+PDF_create_field() no font is required. If a font is specified, only
+ZapfDingbats with encoding=builtin is accepted.
+Fonts loaded with encoding=unicode will not be loaded automatically with 
+encoding=winansi again. It is recommended to load TrueType/OpenType fonts
+with an 8-bit encoding and the option "simplefont".
+
+Common XObject options for PDF_load_image() and PDF_begin_template_ext():
+OPI-1.3, OPI-2.0
+
+PDF_load_graphics(): devicergb
+
+
+PDFlib 9.0.7
+============
+- PDF_set_layer_dependency(): removed unsupported type=Variant and
+  corresponding layer variant options from the PDFlib API Reference.
+
+- PDF_create_annotation(), option "name": the names must be unique on each
+  page, but PDFlib issued only a warning. If a duplicate name is supplied,
+  the function call now fails to prevent inconsistent PDF output.
+
+- PDF_create_pvf(): the default of the "copy" option has been changed from
+  "false" to "true" for all language bindings except C/C++. This temporarily
+  requires more memory, but avoids spurious memory problems in situations
+  where the language's garbage collector no longer has a reference to the
+  memory.
+  
+- The deprecated function PDF_add_thumbnail() is now a no-op since users
+  didn't create thumbnails, and Acrobat ignores embedded thumbnails anyway.
+
+- PDF_fit_table() now supports fitmethod=auto as follows: if the table box is
+  narrower than the fitbox it is enlarged to the fitbox width. This slightly
+  changes the previously undocumented behavior of fitmethod=auto for tables.  
+
+
+PDFlib 9.0.6
+============
+No changes which affect compatibility.
+
+
+PDFlib 9.0.5
+============
+PDF_open_pdi_document() no longer reads Tagged PDF structure by default if
+called in object scope, i.e. if no output document is open. If the PDI
+document is intended for use with a Tagged PDF output document, the option
+usetags=true must be provided.
+
+
+PDFlib 9.0.4
+============
+No changes which affect compatibility.
+
+
+PDFlib 9.0.3
+============
+No changes which affect compatibility.
+
+
+
+PDFlib 9.0.2
+============
+
+Modified Parameter Names
+------------------------
+The following functions used parameter names x_1, y_1 etc. instead
+of the documented names x1, y1 etc.:
+PDF_circular_arc(), PDF_curveto(), PDF_rcurveto(), PDF_shading()
+These have been changed to use the documented names.
+
+Objective-C: this change requires corresponding parameter name
+adjustments in client code.
+
+
+Deprecated Option
+-----------------
+Font options: "autocidfont" is deprecated and no longer functional due to
+internal changes in the font engine.
+
+
+Deprecated Function
+-------------------
+PDF_begin_pattern(): use PDF_begin_pattern_ext() (now for all bindings)
+
+
+Font handling
+-------------
+Due to feature #1625 and bug #4559 (modified treatment of fonts for form
+fields) fonts may now be embedded by default. If this is not desired font
+embedding can be disabled with "embedding=false".
+
+
+Tagged PDF
+----------
+Artifacts are no longer allowed when the currently active element is a
+pseudo element or one of Span, Quote, Note, Reference, BibEntry, Code with
+inline=true.
+
+
+PDFlib 9.0.1
+============
+
+New API function
+----------------
+PDF_begin_pattern_ext() (only for C and C++)
+
+
+New option
+----------
+Option "transform" for PDF_begin_template_ext()
+
+
+Deprecated Functions
+--------------------
+PDF_xshow(): use PDF_fit_textline() with "xadvancelist" option
+(PDF_xshow() is available only in the C and C++ language bindings)
+
+
+XMP metadata
+------------
+Implemented stricter XMP namespace checks for PDF/A-2 and PDF/A-3 to
+follow the XMP 2005 spec and match the behavior of Acrobat Preflight:
+namespace URIs are now required to end in a "/" or "#" character.
+Otherwise the XMP will be rejected.
+
+
+Tagged PDF
+----------
+Modified the handling of H7, H8 etc. so that they are no longer treated
+as standard elements, but require rolemap entries. Since PDF/UA consumers
+are advised to ignore the rolemapping PDFlib also ignores the rolemaps
+of H7 etc. in PDF/UA mode (other than writing them to the PDF output).
+
+
+
+PDFlib 9.0
+==========
+
+New API functions
+-----------------
+PDF_begin_glyph_ext()
+PDF_close_graphics()
+PDF_fill_graphicsblock()
+PDF_fit_graphics()
+PDF_get_option()
+PDF_get_string()
+PDF_info_graphics()
+PDF_load_asset()
+PDF_load_graphics()
+PDF_set_graphics_option()
+PDF_set_text_option()
+
+
+Modified Functionality
+----------------------
+PDI:
+The checks for PDF/A, PDF/X and PDF/UA compatibility were moved from
+PDF_open_pdi_document() to PDF_open_pdi_page(). This may slightly change
+the behavior of applications since incompatible documents can now be opened,
+but no pages can be imported from such documents.
+
+PDI now imports layer definitions by default. As a result the output contains
+layer definitions if the input contains layers. Previously all layer
+definitions were dropped upon import. In order to restore the previous
+behavior supply the option uselayers=false in PDF_open_pdi_document().
+
+Layers for PDF/X:
+PDF_set_layer_dependency(): changed the default of "createorderlist" to
+"true" also in the PDF/X case to improve compatibility with Acrobat X.
+
+Standard Output Intents for PDF/X:
+The "StandardOutputIntent" resource category for UPR files is deprecated.
+
+Image clipping paths:
+If the "clippingpathname" of PDF_load_image() was supplied although the image
+does not contain any clipping path at all, the option was silently ignored.
+Now PDF_load_image() correctly emits an error "Couldn't find clipping path".
+
+Image orientation for JPEG images:
+PDF_load_image() now interprets the orientation tag in the Exif marker of
+JPEG images and automatically rotates the image accordingly. The image output
+looks different than with PDFlib <= 8 if the orientation tag is different
+from 1.
+Workaround: use the option ignoreorientation=true in PDF_load_image() or
+PDF_fit_image()
+
+sRGB treatment of JPEG images with Exif marker:
+JPEG images with an Exif marker which contains the entry "uncalibrated
+colorspace" are no longer treated as sRGB, but rather as DeviceRGB to
+match the Exif specification. Such images are very rare, though.
+Workaround: you can force sRGB handling by supplying the "iccprofile" option
+to PDF_load_image().
+
+16-bit image masks:
+Acrobat 7/8/9 do not handle 16-bit images with an alpha channel correctly.
+In order to work around this problem you can use the "downsamplemask" option
+of PDF_load_image(). By default no downsampling is applied; this differs from
+PDFlib 8 which always reduced 16-bit masks to 8-bit.
+
+Tagged PDF:
+PDF_begin_item() and the "tag" option of various functions reject the "Alt"
+or "ActualText" option if some ancestor in the structure hierarchy already
+has the same attribute.
+The "taborder" option of PDF_begin/end_page_ext() has the new default
+"structure" in Tagged PDF mode (previously: "none") in order to work around
+problems in Tagged PDF validators.
+
+Nesting of tags is now checked according to ISO 32000-1. This may result
+in exceptions for applications which apply tags in wrong nesting order. The
+checks can be disabled with the document option "checktags=none" to migrate
+legacy applications. However, it is strongly recommended to adjust the
+application code to work with checktags=strict to ensure accessible PDF output.
+
+Standard CJK fonts:
+The concept of "Standard CJK fonts" is deprecated. Use externally configured
+TrueType (TTF, TTC) or OpenType (TTF, OTF) fonts instead (with or without
+font embedding). Note that PDFlib GmbH offers free Japanese fonts for
+PDFlib users at www.pdflib.com.
+
+PDF 1.3 output:
+PDF output according to compatibility=1.3 is no longer supported although
+still functional. However, if encryption is requested the PDF version is
+automatically bumped to PDF 1.4 to avoid weak RC4 encryption with 40-bit keys.
+
+
+Deprecated Options
+------------------
+PDF_create_annotation(): options "filename" and "mimetype": use "attachment"
+PDF_load_font(): options "fontstyle" and "monospace": use suitable fonts
+instead
+
+
+Deprecated Keywords
+-------------------
+PDF_info_textline(): keywords "scalex" and "scaley":
+use "fitscalex" and
+"fitscaley"
+
+
+Deprecated Functions
+--------------------
+PDF_begin_glyph(): use PDF_begin_glyph_ext()
+
+PDF_set_parameter(),
+PDF_set_value():
+use PDF_set_option(), PDF_set_text_option() and PDF_set_graphics_option()
+
+PDF_get_parameter(),
+PDF_get_value(): use PDF_get_option() and PDF_get_string()
+
+PDF_get_majorversion(),
+PDF_get_minorversion(): use PDF_get_option()
+
+PDF_setdash(),
+PDF_setdaspattern(),
+PDF_setflat(),
+PDF_setlinejoin(),
+PDF_setlinecap(),
+PDF_setmiterlimit(),
+PDF_initgraphics(): use PDF_set_graphics_option()
+
+PDF_add_thumbnail(): It is recommended to completely avoid
+this feature since PDF viewers create thumbnails automatically.
+
+
+Deprecated Parameters
+---------------------
+The parameter/value system with PDF_get_parameter/value() is generally
+deprecated, and corresponding options of the same name should be used with
+PDF_set_option() etc. However, no corresponding global options are available
+for the following keywords for PDF_get/set_parameter():
+
+honoriccprofile: use the "honoriccprofile" option of PDF_load_image()
+renderingintent: use the "renderingintent" option of PDF_load_image()
+topdown: use the "topdown" option of PDF_begin_page_ext()
+setcolor:iccprofilegray/rgb/cmyk: use the "iccprofilegray/rgb/cmyk" 
+graphics appearance option
+
+
+C++ binding
+-----------
+The convert_to_unicode() method incorrectly used type "string" for the
+"inputformat" and "options" parameters. This was wrong and has been changed
+to "pstring" (which maps to "wstring" in the default configuration).
+
+
+Java binding
+------------
+The name of the PDFlib native library has been changed:
+
+Windows: pdflib_java.dll
+Unix: libpdflib_java.so etc.
+OS X: libpdflib_java.jnilib
+
+
+Incompatibilities to PDFlib 8.1
+-------------------------------
+Incompatible changes between PDFlib 8.1 and 9.0:
+
+- PDF_poca_delete(): additional "optlist" parameter
+- PDF_poca_insert(): the default of the "index" option changed from 0 to -1.
+ 
+
+PDFlib 8.1
+==========
+
+New API functions
+-----------------
+PDF_info_pvf()
+PDF_convert_to_unicode()
+PDF_elliptical_arc()
+
+PDF_begin_dpart()
+PDF_end_dpart()
+
+PDF_poca_new()
+PDF_poca_delete()
+PDF_poca_insert()
+PDF_poca_remove()
+
+
+Deprecated Functions
+--------------------
+PDF_utf16_to_utf8(), PDF_utf8_to_utf16(),
+PDF_utf32_to_utf16(), PDF_utf8_to_utf32(),
+PDF_utf32_to_utf8(), PDF_utf16_to_utf32(): use PDF_convert_to_unicode()
+
+
+Deprecated Options
+------------------
+PDF_load_image(), option template: use createtemplate
+PDF_fit_textflow(), option checkwordsplitting: use avoidwordsplitting
+
+
+Incompatible Behavior
+---------------------
+AES encryption
+
+Due to known weaknesses in AES-256 according to PDF 1.7ext3
+(Acrobat 9) PDFlib no longer encrypts PDF documents with this algorithm, but
+falls back to AES-128 encryption according to PDF 1.7 instead, which doesn't
+support Unicode passwords.
+This implies an incompatible change: If you used one or more of the
+"userpassword", "masterpassword", or "attachmentpassword" options with
+characters outside PDFDocEncoding in an existing PDFlib 8 application,
+you must do one of the following:
+
+- switch to newer Acrobat X encryption, i.e. change your code to use
+  compatibility=1.7ext8
+- keep the PDF 1.7 encryption and refrain from using Unicode passwords,
+  i.e. restrict the characters in passwords to PDFDocEncoding
+
+
+Object fitting
+
+PDF_fit_image(), PDF_add_table_cell(), PDF_fill_imageblock(), and
+PDF_fill_pdfblock(): the behavior of "fitmethod=auto" changed as follows:
+
+- If the object fits into the box the behavior is identical to "nofit", i.e.
+  no scaling (previous versions upscaled small objects).
+
+- If the object is larger than the fitbox the "meet" method is applied, i.e.
+  proportional downscaling (this behavior is identical to previous versions).
+ 
+In order to restore the previous behavior change "fitmethod=auto" to
+"fitmethod=meet".
+
+
+Removed from Documentation
+--------------------------
+The following functions, parameters, and options were already deprecated
+in PDFlib 8. They were marked as "deprecated" in the PDFlib 8 manual
+and are no longer documented in the PDFlib 8.1 manual (although they still
+work):
+
+Functions:
+PDF_begin_template(): use PDF_begin_template_ext()
+PDF_end_template(): use PDF_end_template_ext()
+
+Options:
+PDF_begin_document(): compatibility=1.3, pdfx=PDF/X-1a:2001, pdfx=PDF/X-3:2002
+
+Parameters:
+imagewidth
+imageheight
+image:iccprofile
+orientation
+resx
+resy
+
+
+
+PDFlib 8.0.4
+============
+New features:
+- Objective-C language binding for OS X and iOS
+- Caching of PDI page handles (even closed ones)
+- Support for PostScript XObjects
+- object-oriented interface for Python
+- emit modification date for file attachments
+
+Deprecated Keywords
+-------------------
+PDF_info_image(): targetbox, targetx1/x2/x3/x4, targety1/y2/y3/y4: the
+size of templates with the "reference" option will be calculated automatically.
+
+
+Deprecated Parameters
+---------------------
+PDF_set_parameter(): "license", "licensefile", "nodemostamp": use
+"license", "licensefile", "avoiddemostamp" of PDF_set_option()
+
+
+Standard output intent names for PDF/X:
+
+Updated PDFlib's internal list of standard output intents to reflect the
+current state of the Characterization Data collection at www.color.org.
+
+- Removed the following printing conditions from the list; if you are using
+these you must embed the corresponding ICC profile:
+GRACoL2006_Coated1, SWOP2006_Coated3, SWOP2006_Coated5
+
+- Added the following printing conditions which can now be used without
+embedding an ICC profile:
+FOGRA45, FOGRA46, FOGRA47
+
+- Removed the following printing conditions from the documentation (but not
+from the list in the code) since they are no longer recommended by FOGRA:
+FOGRA27: use FOGRA39 instead
+FOGRA28: use FOGRA45 instead
+FOGRA29: use FOGRA47 instead
+
+- Removed old PDFlib 5 and 6 compatibility entries since they would result
+in non-conforming PDF/X output:
+"OF COM PO P1 F60", "OF COM PO P2 F60", "OF COM PO-P3 F60", "OF COM PO P4 F60",
+"OF COM NE P1 F60", "OF COM NE P2 F60", "OF COM NE P3 F60", "OF COM NE P4 F60",
+"SC GC2 CO F30", "Ifra_NP_40lcm_neg+CTP_05.00"
+
+
+PDFlib 8.0.3
+============
+New features:
+- option "barcode" for PDF_create_field/group()
+- option "type=prc" for PDF_load_3ddata()
+- options "forcebox" and "expandbox" for PDF_open_pdi_page()
+
+
+PDFlib 8.0.2
+============
+New features:
+- options "colwidthdefault" and "rowheightdefault" for PDF_fit_textflow()
+- numeric byte code references for symblic fonts with the "&.#<code>;" syntax
+- automatic synchronization of marked content for Tagged PDF and layers
+- option "createorderlist" for PDF_set_layer_dependency()
+- create and import PDF 1.7 extension level 8 (Acrobat X) documents
+- option "rolemap" for PDF_begin_document() to support custom tags in
+  PDF_begin_item()
+
+
+PDFlib 8.0.1
+============
+
+Block Plugin 4.1 and PPS 8.0.1
+------------------------------
+The Block API number has been increased because the Block Plugin and
+PPS support the following new features:
+
+- Support the keyword "auto" for the "position" property in property group
+  "object fitting" for Textline Blocks (but not other Block types).
+- Support the keyword "_auto" for the "script" property in property group
+  "text preparation".
+
+This means that Block PDFs created with Plugin 4.1 will be rejected by
+Block Plugin 4.0 and PPS 8.0.0!
+
+
+PDFlib 8.0.0
+============
+
+New API functions
+-----------------
+PDF_add_path_point()
+PDF_add_portfolio_file()
+PDF_add_portfolio_folder()
+PDF_align()
+PDF_begin_mc()
+PDF_circular_arc()
+PDF_close_font()
+PDF_delete_path()
+PDF_draw_path()
+PDF_ellipse()
+PDF_end_mc()
+PDF_end_template_ext()
+PDF_info_image()
+PDF_info_path()
+PDF_info_pdi_page()
+PDF_mc_point()
+PDF_set_option()
+PDF_utf8_to_utf32()
+PDF_utf32_to_utf8()
+PDF_utf16_to_utf32()
+
+
+Block Plugin and PPS
+--------------------
+The "pdiusebox" Block property never worked, and is no longer available. It
+will silently be ignored by PDFlib 8.
+ 
+
+C binding
+---------
+Applications which use the PDFlib binding for C must be linked with a
+C++ compiler since the PDFlib library includes some parts which are
+implemented in C++. Using a C linker may result in unresolved externals
+unless the application is explicitly linked against the required C++
+support libraries.
+
+
+C++ binding
+-----------
+The C++ binding now supports a wstring-based interface, but can be
+configured to use the plain C++ string type as in PDFlib 7. See
+the PDFlib Tutorial for details regarding full source code
+compatibility with PDFlib 7 applications. However, the recommended
+approach is to switch to the new wstring interface.
+
+
+Python binding
+--------------
+The non-Unicode aware compatibility binding for Python is no longer
+documented (but available in the code nevertheless).
+
+
+RPG binding
+-----------
+The function name prefix for the Unicode-aware version of the RPG binding
+changed from "RPDF_" to "PDF_" since the Unicode-aware binding is now
+the default.
+
+
+Deprecated functions
+--------------------
+PDF_end_template(): use PDF_end_template_ext()
+
+
+The following functions, parameters, and options were already deprecated
+in PDFlib 7. They were marked as "deprecated" in the PDFlib 7 manual
+and are no longer documented in the PDFlib 8 manual (although they still
+work):
+
+Functions:
+PDF_open_pdi(): use PDF_open_pdi_document()
+PDF_close_pdi(): use PDF_close_pdi_document()
+PDF_get_pdi_value(): use PDF_pcos_get_number()
+PDF_get_pdi_parameter(): use PDF_pcos_get_string()
+
+
+Deprecated Parameters
+---------------------
+imagewidth, imageheight, image:iccprofile, orientation, resx, resy:
+use PDF_info_image()
+
+warning, iccwarning, fontwarning, glyphwarning, imagewarning, pdiwarning:
+use errorpolicy
+
+ascenderfaked, capheightfaked, descenderfaked, fontencoding,
+fontname, fontstyle, xheightfaked: use PDF_info_font()
+
+autocidfont, autosubsetting, unicodemap: use options in PDF_load_font()
+
+fontmaxcode, capheight, ascender, descender, xheight, monospace:
+use PDF_info_font()
+
+subsetlimit, subsetminsize: use options in PDF_load_font()
+
+errorpolicy=legacy
+
+
+Deprecated Options
+------------------
+PDF_load_font(): fontwarning, kerning
+PDF_fit_textline(): locallink, weblink
+PDF_info_textline(): unmappedglyphs
+PDF_add/create_textflow(): textwarning
+PDF_info_textflow(): remainchars
+PDF_load_image(): imagewarning
+PDF_open_pdi_document(): pdiwarning
+PDF_open_pdi_page(): infomode, pdiwarning
+PDF_process_pdi(): pdiwarning
+PDF_fill_*block(): glyphwarning, fontwarning, imagewarning, pdiwarning
+PDF_create_action(): actionwarning
+PDF_create_annotation(): annotwarning
+PDF_create_field() and PDF_create_fieldgroup(): fieldwarning
+many functions: errorpolicy=legacy
+
+
+Fonts
+-----
+OpenType fonts loaded with encoding "unicode" are no longer force-embedded.
+If embedding is desired you must supply the "embedding" option when
+loading the font.
+
+Text strings for use with symbol fonts (e.g. ZapfDingbats) loaded with
+encoding=builtin and textformat=ut8 must actually be provided in UTF-8
+format. This is different from PDFlib 7 which ignored the textformat in
+this situation (the PDFlib 7 behavior was a bug which was leveraged by
+some applications).
+
+
+Images
+------
+PDFlib 8 will by default interpret an alpha channel in TIFF and PNG images.
+If this is not desired it can be disabled with the "ignoremask" option
+of PDF_load_image().
+
+
+Text output
+===========
+PDFlib 8 will apply kerning by default; in contrast, PDFlib 7 applied
+kerning by default only in Textflow, and only if the font had been loaded
+with kerning=true.
+In order to avoid kerning for compatibility with older versions, set
+readkerning=false when loading the font, or kerning=false when generating
+text output.
+
+
+Performance
+-----------
+PDF_load_font(): unlike earlier versions, PDFlib 8 will read kerning values
+from all loaded fonts by default. If kerning is not required font loading
+can be accelerated with the "readkerning=false" option.
+
+
+Form fields
+-----------
+PDF_create_field() with type=checkbox or radiobutton: glyphs from ZapfDingbats
+font (e.g. checkmark) are displayed with incorrect spacing in Acrobat 9 and X
+due to a bug in Acrobat.
+As a workaround the option "unicodemap=false" can be used, but this will
+result in the omission of the ToUnicode CMap.
+
+
+Stricter checks
+---------------
+The output intent for PDF/A and PDF/X must be set before calling any of
+the following functions:
+PDF_begin_page_ext()
+PDF_open_pdi_page()
+PDF_setcolor()
+PDF_load_image()
+
+This was recommended in earlier versions, but up to PDFlib 7 this rule
+was not enforced.

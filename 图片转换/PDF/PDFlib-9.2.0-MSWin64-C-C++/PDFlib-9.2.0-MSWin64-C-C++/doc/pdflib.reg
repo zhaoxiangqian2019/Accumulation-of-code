@@ -1,0 +1,12 @@
+Template for developers who wish to enter the license key in the
+Windows registry without using the MSI installer.
+Delete the first three lines before using this file.
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\PDFlib]
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\PDFlib\PDFlib9]
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\PDFlib\PDFlib9\9.2.0]
+"license"="---enter your license key here---"
+"SearchPath"="C:\\Program Files\\PDFlib\\PDFlib 9.2.0 64-bit\\bind\\data"

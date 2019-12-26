@@ -1,0 +1,163 @@
+一、XML
+1.1 xml 简介
+
+a） xml eXtensible Markup Language 可扩展标记语言，是一种标记语言。
+b）	xml 是一种非常灵活的语言，没有固定的标签，所有的标签都可以自定义。
+c）	通常，xml 被用于信息的记录和传递。因此 xml 经常被用于充当配置文件。
+
+1.2 良好格式的 xml
+
+a） 声明信息，用于描述 xml 的版本和编码方式。
+	<?xml version = "1.0" encoding = "UTF-8"?>
+b） xml 有且仅有一个根元素。
+c）	xml 是大小写敏感的。
+d）	标签是成对的，而且要正确嵌套。
+e） 属性值要使用双引号。
+f） 注释的写法：
+	<!-- 这里是注释 -->
+
+eg：
+<books>
+	<book id = "b01">
+		<name>C++ 高级编程</name>
+		<author>张三</author>
+		<price>50.0</price>
+	</book>
+	<book id = "b02">
+		<name>C++ 中级编程</name>
+		<author>李四</author>
+		<price>30.0</price>
+	</book>
+</books>	
+	
+二、DTD
+2.1 DTD 简介
+a） DTD Document Type Definition 文档类型定义
+b） DTD 用于约束 xml 文档格式，保证 xml 是一个有效的 xml。
+c） DTD 可以分为两种，内部 DTD，外部 DTD。
+2.2.1 内部DTD的定义
+a） 语法如下：
+<!DOCTYPE 根元素 [元素声明]>
+b） 元素声明语法：
+<!ELEMENT 元素名 (子元素[, 子元素...])>
+c） 数量词
+	> +：表示出现 1 次或多次，至少 1 次。
+	> ?：表示出现 0 次 或 1 次。
+	> *：表示出现任意次。
+d）属性声明语法
+	>属性类型：CDATA，表示字符串数据(character data)
+	>默认值：
+		- #REQUIRED 表示必须出现。
+		- #IMPLIED  表示不是必须的。
+	<!ATTLIST 元素名称 属性类型 默认值>
+	
+eg：
+
+<?xml version = "1.0" encoding = "UTF-8">
+<!-- 声明内部DTD -->
+<!DOCTYPE scores [
+	<!ELEMENT scores (student+)>											<!-- 表示在scores下student的个数 -->
+	<!ELEMENT student (name, course, score)>					<!-- 表示在student下name、course、score只出现一次 -->
+	<!ATTLIST student id CDATA #REQUIRED>							<!-- 表示student中id是一个字符串型的必须有的属性 -->
+	<!ELEMENT name (#PCDATA)>													<!-- 表示标签之间是文本 -->
+	<!ELEMENT course (#PCDATA)>												<!-- 表示标签之间是文本 -->
+	<!ELEMENT score (#PCDATA)> 												<!-- 表示标签之间是文本 -->
+]>
+<scores>
+	<student id = "1">
+		<name>张三</name>
+		<course>C++</course>
+		<score>89</score>
+	</student>
+	<student id = "2">
+		<name>李四</name>
+		<course>C++</course>
+		<score>90</score>
+	</student>
+	<student id = "3">
+		<name>王五</name>
+		<course>C++</course>
+		<score>88</score>
+	</student>
+</scores>
+	
+2.2.2 外部DTD的定义
+a）创建一个独立的 dtd 文件
+<?xml version = "1.0" encoding = "UTF-8">
+<!ELEMENT scores (student+)>											<!-- 表示在scores下student的个数 -->
+<!ELEMENT student (name, course, score)>					<!-- 表示在student下name、course、score只出现一次 -->
+<!ATTLIST student id CDATA #REQUIRED>							<!-- 表示student中id是一个字符串型的必须有的属性 -->
+<!ELEMENT name (#PCDATA)>													<!-- 表示标签之间是文本 -->
+<!ELEMENT course (#PCDATA)>												<!-- 表示标签之间是文本 -->
+<!ELEMENT score (#PCDATA)> 												<!-- 表示标签之间是文本 -->
+
+b）在 xml 文件中引入外部 dtd 文件
+<?xml version = "1.0" encoding = "UTF-8">
+<!-- 引入外部DTD文件 -->
+<!DOCTYPE scores SYSTEM "scores.dtd">
+<scores>
+	<student id = "1">
+		<name>张三</name>
+		<course>C++</course>
+		<score>89</score>
+	</student>
+	<student id = "2">
+		<name>李四</name>
+		<course>C++</course>
+		<score>90</score>
+	</student>
+	<student id = "3">
+		<name>王五</name>
+		<course>C++</course>
+		<score>88</score>
+	</student>
+</scores>
+
+拓展：
+	XSD 
+		- XML Schema 是 DTD 的替代者
+		- 不仅可以定义 XML 文档的结构，还可以规范文档的内容
+		- XSD 本身也是 XML 文档
+		- XSD 采用 XML文档来定义语句结束，比 DTD 要复杂一些，当时功能强大的多。
+			· 支持丰富的数据类型
+			· 允许开发者自定义数据类型
+			· 可读性强
+			· 可针对未来需求进行扩展
+			
+三、XML 的解析
+对 xml 文件进行操作，包括创建 xml，对 xml 文件进行增、删、改、查操作
+3.1 常见的 xml 解析技术
+3.1.1 DOM 解析
+ 是官方提供的解析方式，基于 xml 树解析的
+3.1.2 SAX
+	是民间的解析方式，基于事件的解析
+3.1.3 JDOM 解析
+	第三方提供，开元免费的解析方式，比 BOM 解析更快
+3.1.4 DOM4J
+	第三方提供，免费开元，是 JDOM 的升级版
+	
+3.2 DOM4J 解析 XML
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
